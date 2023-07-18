@@ -1,0 +1,28 @@
+@page "/add-product"
+@inject ICategoryService CategoryService
+@inject IProductService ProductService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Add - Product</PageTitle>
+
+<ModuleTitle Title="Add product" />
+
+
+<button class="btn btn-dark" @onclick="OnNavigateProductsPage">
+    Go back products
+</button>
+<EditForm Model="@_product">
+    <div class="row">
+        <div class="col-8 form-group">
+            <label for="title" class="col-form-label"> Title</label>
+            <InputText id="title" @bind-Value="_product.Title" required class="form-control" />
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    private readonly Product _product = new();
+
+
+    private void OnNavigateProductsPage() => NavigationManager.NavigateTo("/products");
+}

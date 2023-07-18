@@ -1,9 +1,14 @@
 @page "/products"
 @inject IProductService ProductService
+@inject NavigationManager NavigationManager
 
 <PageTitle>Products</PageTitle>
 
 <ModuleTitle Title="Products" />
+
+<button class="btn btn-dark mb-5" @onclick="OnNavigateToAddProduct">
+    Add product
+</button>
 
 @if (_products?.Count > 0)
 {
@@ -38,4 +43,7 @@ else
     {
         _products = await ProductService.Get() ?? new List<Product>();
     }
+
+
+    private void OnNavigateToAddProduct() => NavigationManager.NavigateTo("/add-product");
 }
