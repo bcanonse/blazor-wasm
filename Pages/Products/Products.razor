@@ -1,6 +1,7 @@
 @page "/products"
 @inject IProductService ProductService
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
 
 <PageTitle>Products</PageTitle>
 
@@ -20,6 +21,9 @@
                 <div class="card-body">
                     <h4><b>@product.Title</b></h4>
                     <p>@product.Price?.ToString("C")</p>
+                    <button title="Delete" class="btn btn-danger btn-delete" @onclick="@(() => DeleteProdut(product))">
+                        <span class="oi oi-trash"></span>
+                    </button>
                 </div>
             </div>
         }
@@ -41,9 +45,20 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        _products = await ProductService.Get() ?? new List<Product>();
+        await GetProducts();
     }
+
+    private async Task GetProducts() => _products = await ProductService.Get() ?? new List<Product>();
 
 
     private void OnNavigateToAddProduct() => NavigationManager.NavigateTo("/add-product");
+
+    private async Task DeleteProdut(Product product)
+    {
+        if (!await JsRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to remove {product.Title}"))
+            return;
+
+        await ProductService.Delete(product.Id);
+        await GetProducts();
+    }
 }
