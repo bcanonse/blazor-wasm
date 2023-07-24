@@ -13,9 +13,9 @@ internal sealed class CategoryService : ICategoryService
         client = httpClient;
         option = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
     }
-    public async Task<List<Category>> Get()
+    public async Task<List<Category>?> Get()
     {
-        var response = await client.GetAsync("/v1/Categories");
+        var response = await client.GetAsync("v1/categories");
         var content = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)
         {
@@ -27,5 +27,5 @@ internal sealed class CategoryService : ICategoryService
 
 public interface ICategoryService
 {
-    Task<List<Category>> Get();
+    Task<List<Category>?> Get();
 }
